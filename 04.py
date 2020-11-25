@@ -1,9 +1,5 @@
 def has_unique(words):
-    temp = []
-    for word in words:
-        if word not in temp:
-            temp.append(word)
-    return len(temp) == len(words)
+    return len(set(words)) == len(words)
 
 def no_anagrams(words):
     temp = []
