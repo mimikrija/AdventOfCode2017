@@ -4,11 +4,7 @@ def has_unique(words):
 def no_anagrams(words):
     temp = []
     for word in words:
-        anagram = []
-        for c in word:
-            anagram.append(c)
-        anagram.sort()
-        anagram= (''.join(anagram))
+        anagram = "".join(sorted(word))
         temp.append(anagram)
     return has_unique(temp)
 
