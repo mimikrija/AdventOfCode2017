@@ -6,13 +6,18 @@ for line in infile:
 
 #print(instructions)
 index = 0
-solution_1 = 0
+solution = 0
+part = '2'
 
 while index < len(instructions):
     next_index = instructions[index]
-    instructions[index] += 1
+    if part == '2' and next_index >= 3:
+        instructions[index] -= 1
+    else:
+        instructions[index] += 1
     index += next_index
-    solution_1 += 1
+    solution += 1
 
-print("Part 1: it takes ", solution_1, "steps to exit!")
+print("Part", part, ": it takes ", solution, "steps to exit!")
 # Part 1: it takes  375042 steps to exit!
+# Part 2: it takes  28707598 steps to exit!
