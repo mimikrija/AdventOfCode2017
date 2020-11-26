@@ -1,10 +1,6 @@
-infile = open('./inputs/05', 'r')
+with open('./inputs/05', 'r') as infile:
+    instructions = [int(line) for line in infile.readlines()]
 
-instructions = []
-for line in infile:
-    instructions.append(int(line))
-
-#print(instructions)
 index = 0
 solution = 0
 part = '2'
