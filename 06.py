@@ -22,21 +22,18 @@ solution_1 = 0 # number of cycles
 while is_unique(instructions):
     chosen = max(memory)
 
-    basic_add = [ chosen // 16 for _ in range (16)]
-    remainder_add = [ 1 for _ in range (chosen % 16)]
-
-    positions = [(memory.index(chosen)+1 + i) % 16 for i in range(16)]
-
+    positions = [(memory.index(chosen)+ 1 + i) % 16 for i in range(16)]
+    memory[memory.index(chosen)] = 0 # reset chosen memory slot
 
     solution_1 += 1
-    i = 0
-    memory[memory.index(chosen)] = 0
 
+    i = 0
     for n in positions:
-        memory[n] += basic_add[i]
-        if i < len(remainder_add):
-            memory[n] += remainder_add[i]
-        i+= 1
+        memory[n] += chosen // 16
+        if i < chosen%16:
+            memory[n] += 1
+        i += 1
+
     instructions.append(list_to_string(memory))
 
 print("It takes ", solution_1, "cycles to reach the same memory configuration!")
