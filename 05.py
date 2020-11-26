@@ -14,6 +14,6 @@ while index < len(instructions):
     index += next_index
     solution += 1
 
-print("Part", part, ": it takes ", solution, "steps to exit!")
+print(f"Part {part}: it takes {solution} steps to exit!")
 # Part 1: it takes  375042 steps to exit!
 # Part 2: it takes  28707598 steps to exit!
