@@ -19,16 +19,13 @@ initialization = [ var +'=0' for var in args ]
 for init in initialization:
     exec(init)
 
-all_results = []
+solution_2 = 0
 for instruction in program:
     if eval(instruction[1]):
         exec(instruction[0])
-    all_results.append(eval(get_variable_name(instruction)))
+    solution_2 = max(eval(get_variable_name(instruction)),solution_2)
 
-final_results = [eval(arg) for arg in args]
-
-solution_1 = max(final_results)
-solution_2 = max(all_results)
+solution_1 = max([eval(arg) for arg in args])
 
 print(f'Part 1: maximum value after all evaluations is {solution_1}!')
 print(f'Part 2: maximum value reached during evaluations is {solution_2}!')
