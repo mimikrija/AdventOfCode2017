@@ -1,5 +1,15 @@
 import collections
 
+import re
+
+
+words = re.compile(r'[a-z]+')
+numbers = re.compile(r'[-]?\d+')
+conditions = re.compile(r'[^a-z0-9- ]+')
+
+for line in instructions:
+    bla = re.findall(words,line)
+
 def is_same(configuration):
     return len(set(configuration)) == 1
 
