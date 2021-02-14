@@ -4,12 +4,12 @@ from santas_little_helpers import *
 import re
 
 HEX_DIRECTIONS = {
-    'nw': (0, 1, -1),
+     'n': (0, 1, -1),
     'ne': (1, 0, -1),
-     'e': (1, -1, 0),
-    'se': (0, -1, 1),
+    'se': (1, -1, 0),
+     's': (0, -1, 1),
     'sw': (-1, 0, 1),
-     'w': (-1, 1, 0)
+    'nw': (-1, 1, 0)
 }
 
 
