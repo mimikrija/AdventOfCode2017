@@ -11,6 +11,14 @@ depth_and_range = {layer: size for layer, size in (map(int, line.split(': ')) fo
 # part 1
 severity = sum(time*size for time, size in depth_and_range.items() if scanner_at_zero_position(time, size))
 
+# part 2: find initial delay which makes sure we don't get caught
+delay = 0
+while True:
+    if not any(scanner_at_zero_position(time+delay, size) for time, size in depth_and_range.items()):
+        break
+    else:
+        delay += 1
 
-print_solutions(severity)
+print_solutions(severity, delay)
 # Part 1 solution is: 2384
+# Part 2 solution is: 3921270
