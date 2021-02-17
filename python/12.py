@@ -23,8 +23,7 @@ def count_groups(in_tree):
     return count
 
 
-connections = (line.split(' <-> ') for line in get_input('inputs/12'))
-connections = {pipe: programs.split(', ') for pipe, programs in connections}
+connections = {pipe: programs.split(', ') for pipe, programs in (line.split(' <-> ') for line in get_input('inputs/12'))}
 
 
 programs_in_0_group = len(find_connections(connections, ['0']))
