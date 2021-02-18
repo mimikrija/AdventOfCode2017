@@ -11,20 +11,18 @@ def adjacents(in_coordinate):
 
 
 def remove_group(in_coordinates):
-    coordinates_to_check = deque(in_coordinates)
-    remaining_coordinates = set(coordinates_to_check)
-    start = coordinates_to_check.pop()
+    remaining_coordinates = set(in_coordinates)
+    start = remaining_coordinates.pop() # pop a random coord to start the search from
     frontier = deque()
-    frontier.append(start) # just add something to be the first coord to check
-    group = {start}
+    frontier.append(start)
     while frontier:
         current_position = frontier.pop()
         for next_position in adjacents(current_position):
             if next_position in remaining_coordinates:
                 frontier.appendleft(next_position)
-                group.add(next_position)
-                remaining_coordinates -= group
-    return remaining_coordinates-group
+                remaining_coordinates.remove(next_position)
+    return remaining_coordinates
+
 
 def count_groups(in_coordinates):
     count = 0
