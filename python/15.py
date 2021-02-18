@@ -6,27 +6,19 @@ from santas_little_helpers import *
 # Generator B starts with 124
 
 
-def generate_A():
-    last_value = 699
-    #last_value = 65
+def generate(start, multiplier):
+    last_value = start
     while True:
-        last_value *= 16807
-        last_value %= 2147483647
-        yield last_value & 0b1111111111111111
-
-def generate_B():
-    last_value = 124
-    #last_value = 8921
-    while True:
-        last_value *= 48271
+        last_value *= multiplier
         last_value %= 2147483647
         yield last_value & 0b1111111111111111 # same as 0xffff
 
 
-A = generate_A()
-B = generate_B()
+A = generate(699, 16807)
+B = generate(124, 48271)
 
 part_1 = sum(next(A) == next(B) for _ in range(40*1000*1000))
+
 
 print_solutions(part_1)
 # Part 1 solution is: 600
