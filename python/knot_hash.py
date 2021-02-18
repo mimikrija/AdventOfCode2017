@@ -41,11 +41,11 @@ def sparse_hash(lengths):
 def dense_hash(in_circle, hash_type='hex'):
     circle = list(sparse_hash(generate_lengths(in_circle)))
     dense = (reduce(xor, circle[n*16:(n+1)*16]) for n in range(16))
-
+    hex_type = ''.join('{:02x}'.format(num) for num in dense)
     if hash_type == 'hex':
-        return ''.join('{:02x}'.format(num) for num in dense)
+        return hex_type
     if hash_type == 'bin':
-        return ''.join('{:02b}'.format(num) for num in dense)
+        return ''.join('{:04b}'.format(int(num, 16)) for num in hex_type)
 
 
 def generate_lengths(in_lengths):
