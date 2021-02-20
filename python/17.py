@@ -7,6 +7,14 @@ def insert_position(current_position, step, size):
     else:
         return current_position + step + 1
 
+def generate_zero_positions(step, insertions):
+    pos = 0
+    for size in range(1, insertions+1):
+        pos = insert_position(pos, step, size)
+        if pos == 1:
+            solution = size
+    yield solution
+
 step = 386
 #step = 3
 
@@ -25,14 +33,11 @@ for pos in range(1,2017+1):
         last_points_to = circle[last]
         last = last_points_to
 
-pos = 0
-for size in range(1, 50000000):
-    pos = insert_position(pos, step, size)
-    if pos == 1:
-        part_2 = size
-
 
 part_1 = circle[2017]
+part_2 = next(generate_zero_positions(step, 50000000))
+
+
 print_solutions(part_1, part_2)
 # Part 1 solution is: 419
 # Part 2 solution is: 46038988
