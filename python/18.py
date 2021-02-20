@@ -13,14 +13,24 @@ def initialize_registers(instructions):
     return registers
 
 
-def duo(instructions):
-    registers = initialize_registers(instructions)
-    pos = 0
+def duo(instructions, registers, pos=0, is_part_2=False):
 
     while pos < len(instructions):
         operation, *args = instructions[pos]
         if operation == 'snd':
-            sound = registers[args[0]]
+            if not is_part_2:
+                sound = registers[args[0]]
+
+        if operation == 'rcv':
+            if not is_part_2:
+                try:
+                    compare = int(args[0])
+                except:
+                    compare = registers[args[0]]
+                if compare != 0:
+                    if sound != 0:
+                        return sound
+
 
         if operation == 'set':
             try:
@@ -46,15 +56,6 @@ def duo(instructions):
             except:
                 registers[args[0]] %= registers[args[1]]
 
-        if operation == 'rcv':
-            try:
-                compare = int(args[0])
-            except:
-                compare = registers[args[0]]
-            if compare != 0:
-                if sound != 0:
-                    return sound
-
         if operation == 'jgz':
             try:
                 compare = int(args[0])
@@ -71,7 +72,8 @@ def duo(instructions):
 
 instructions = [line.split(' ') for line in get_input('inputs/18')]
 
-part_1 = duo(instructions)
+registers_pt1 = initialize_registers(instructions)
+part_1 = duo(instructions, registers_pt1)
 
 print_solutions(part_1)
 # Part 1 solution is: 3188
