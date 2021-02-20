@@ -1,5 +1,16 @@
 # Day 17: Spinlock
 from santas_little_helpers import print_solutions
+from collections import deque
+
+
+def last_points_to(step, max_size):
+    spinlock = deque([0])
+    for size in range(1, max_size+1):
+        spinlock.rotate(-step)
+        spinlock.append(size)
+    # using this approach the most recent element is always inserted at the end
+    # hence, the last element 'points to' spinlock[0]
+    return spinlock[0]
 
 
 def insert_position(current_position, step, size):
@@ -7,6 +18,7 @@ def insert_position(current_position, step, size):
         return (current_position + step) % size + 1
     else:
         return current_position + step + 1
+
 
 def generate_zero_positions(step, insertions):
     pos = 0
@@ -16,27 +28,11 @@ def generate_zero_positions(step, insertions):
             solution = size
     yield solution
 
+
 # my input
 step = 386
 
-
-# circular linked list {position: points_to}
-circle = {0: 0}
-last = 0
-
-for pos in range(1,2017+1):
-    # insert element into a linked list
-    last_points_to = circle[last]
-    circle[last] = pos
-    circle[pos] = last_points_to
-    last = pos
-    for _ in range(step % (pos+1)):
-        # step forward step steps
-        last_points_to = circle[last]
-        last = last_points_to
-
-
-part_1 = circle[2017]
+part_1 = last_points_to(step, 2017)
 part_2 = next(generate_zero_positions(step, 50000000))
 
 
