@@ -1,6 +1,7 @@
 # Day 17: Spinlock
 from santas_little_helpers import print_solutions
 
+
 def insert_position(current_position, step, size):
     if current_position + step >= size:
         return (current_position + step) % size + 1
@@ -15,8 +16,9 @@ def generate_zero_positions(step, insertions):
             solution = size
     yield solution
 
+# my input
 step = 386
-#step = 3
+
 
 # circular linked list {position: points_to}
 circle = {0: 0}
