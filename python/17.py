@@ -20,7 +20,7 @@ def insert_position(current_position, step, size):
         return current_position + step + 1
 
 
-def generate_zero_positions(step, insertions):
+def zero_points_to(step, insertions):
     pos = 0
     for size in range(1, insertions+1):
         pos = insert_position(pos, step, size)
@@ -33,7 +33,7 @@ def generate_zero_positions(step, insertions):
 step = 386
 
 part_1 = last_points_to(step, 2017)
-part_2 = next(generate_zero_positions(step, 50000000))
+part_2 = next(zero_points_to(step, 50000000))
 
 
 print_solutions(part_1, part_2)
