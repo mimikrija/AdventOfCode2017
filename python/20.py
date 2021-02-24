@@ -8,7 +8,7 @@ from collections import Counter
 from itertools import combinations
 
 def magnitude(in_named):
-    return sqrt(in_named[0]**2 + in_named[1]**2 + in_named[2]**2)
+    return sqrt(sum(num**2 for num in in_named))
 
 def discriminant(a, b, c):
     return b**2 - 4*a*c
