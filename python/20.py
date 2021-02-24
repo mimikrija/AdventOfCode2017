@@ -15,10 +15,17 @@ def discriminant(a, b, c):
 
 def solution(a, b, c):
     D = discriminant(a, b, c)
-    if a == 0 or D < 0: # no real/finite solutions
+    if D < 0: # no real/finite solutions
         return False
 
-    solutions = ((-b + root_factor * sqrt(D))/(2*a) for root_factor in (-1, 1))
+    if a == 0: # not a quadratic equation
+        if b !=0:
+            solutions = [-c/b]
+        else:
+            return False
+    else: # quadratic equation, two solutions
+        solutions = ((-b + root_factor * sqrt(D))/(2*a) for root_factor in (-1, 1))
+
     return (sol for sol in solutions if sol >= 0)
 
 
@@ -45,6 +52,8 @@ def is_coliding(particle_one, particle_two):
     C_z = z_1 - z_2
     
     all_solutions = [solution(A_x, B_x, C_x), solution(A_y, B_y, C_y), solution(A_z, B_z, C_z)]
+    if not all_solutions:
+        return False
 
     if any(not sol for sol in all_solutions):
         return False
@@ -54,6 +63,8 @@ def is_coliding(particle_one, particle_two):
     else:
         all_solutions = [*solution(A_x, B_x, C_x), *solution(A_y, B_y, C_y), *solution(A_z, B_z, C_z)]
         #all_solutions = [*sol for sol in all_solutions]
+        if not all_solutions:
+            return False
         count_solutions = Counter(all_solutions).most_common()
         if count_solutions[0][1] == 3:
             return count_solutions[0][0] # colision time
