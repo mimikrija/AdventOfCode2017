@@ -87,7 +87,7 @@ for data in particle_raw_data:
 
 # in the "long run", the closest particle is the one with smallest acceleration
 closest = particle_data.index(min(particle_data, key=lambda arg: magnitude(arg.acceleration)))
-print_solutions(closest)
+
 
 
 remaining = set(particle_data)
@@ -102,18 +102,15 @@ for one, two in combinations(particle_data, 2):
             collisions[time].append(two)
         else:
             collisions[time] = [one, two]
-            #colliding.add(one)
-            #colliding.add(two)
+
 
 removed_so_far = set()
 for time, members in sorted(collisions.items()):
-    print(time, len(set(members)))
-    if len(removed_so_far & set(members)) == 1:
-        print('helo')
-        continue
-    removed_so_far |= set(members)
     remaining -= set(members)
-    #print(time, len(members), len(set(members)))
-    #print(len(remaining))
 
-print(len(remaining)) # 575 to high
+remaining_particles = len(remaining)
+
+
+print_solutions(closest, remaining_particles)
+# Part 1 solution is: 170
+# Part 2 solution is: 571
