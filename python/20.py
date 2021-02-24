@@ -5,7 +5,7 @@ from re import findall
 from collections import namedtuple
 from math import sqrt
 from collections import Counter
-from itertools import product
+from itertools import combinations
 
 def magnitude(in_named):
     return sqrt(in_named[0]**2 + in_named[1]**2 + in_named[2]**2)
@@ -83,7 +83,7 @@ remaining = set(particle_data)
 colliding = set()
 times = []
 collisions = {}
-for one, two in product(particle_data, repeat=2):
+for one, two in combinations(particle_data, 2):
     time = is_coliding(one, two)
     if time:
         if time in collisions:
