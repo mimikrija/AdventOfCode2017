@@ -1,7 +1,7 @@
 # Day 20: Particle Swarm
 
 from santas_little_helpers import *
-from re import findall
+import re
 from collections import namedtuple
 from math import sqrt
 from collections import Counter
@@ -70,20 +70,16 @@ def is_coliding(particle_one, particle_two):
             return count_solutions[0][0] # colision time
 
 
-
 ParticleData = namedtuple('ParticleData', ['position', 'velocity', 'acceleration'])
-Position = namedtuple('Position', ['x', 'y', 'z'])
-Velocity = namedtuple('Velocity', ['x', 'y', 'z'])
-Acceleration = namedtuple('Acceleration', ['x', 'y', 'z'])
 
-particle_raw_data = [list(map(int, findall(r'[-]*\d+', line))) for line in get_input('inputs/20')]
+input_pattern = re.compile(r'p=<(-*\d+,-*\d+,-*\d+)>, v=<(-*\d+,-*\d+,-*\d+)>, a=<(-*\d+,-*\d+,-*\d+)>')
+
 particle_data = []
-for data in particle_raw_data:
-    position = tuple(data[:3])
-    velocity = tuple(data[3:6])
-    acceleration = tuple(data[6:])
-    particle_data.append(ParticleData(position, velocity, acceleration))
-
+for line in get_input('inputs/20'):
+    position, velocity, acceleration = (tuple(map(int, data.split(',')))
+                                        for data in re.match(input_pattern, line).groups())
+    particle = ParticleData(position, velocity, acceleration)
+    particle_data.append(particle)
 
 # in the "long run", the closest particle is the one with smallest acceleration
 closest = particle_data.index(min(particle_data, key=lambda arg: magnitude(arg.acceleration)))
