@@ -13,36 +13,23 @@ def magnitude(in_named):
 def discriminant(a, b, c):
     return b**2 - 4*a*c
 
-def solution(a, b, c):
-    D = discriminant(a, b, c)
-    if D < 0: # no real/finite solutions
-        return False
-
-    if a == 0: # not a quadratic equation
-        if b !=0:
-            solutions = [-c/b]
-        else:
-            return False
-    else: # quadratic equation, two solutions
-        solutions = ((-b + root_factor * sqrt(D))/(2*a) for root_factor in (-1, 1))
-
-    return (sol for sol in solutions if sol >= 0)
-
 
 def solve_quadratic(a, b, c):
     D = discriminant(a, b, c)
+
     if D < 0: # no real/finite solutions
-        return False
+        return [None]
 
     if a == 0: # not a quadratic equation
-        if b !=0:
-            solutions = [-c/b]
-        else:
-            return False
-    else: # quadratic equation, two solutions
-        solutions = ((-b + root_factor * sqrt(D))/(2*a) for root_factor in (-1, 1))
+        try:
+            return [-c/b]
+        except:
+            return [None]
 
-    return [sol for sol in solutions if sol >= 0]
+    # quadratic equation, one/two solutions
+    # using set here in case D == 0 and we get two identical solutions
+    return list({(-b + root_factor * sqrt(D))/(2*a) for root_factor in (-1, 1)})
+
 
 def ABC(first_component, second_component):
     C, B, A = (one-two for one, two in zip(first_component, second_component))
@@ -52,55 +39,53 @@ def ABC(first_component, second_component):
 
     return A, B, C
 
+
 def solve_per_component(particle_one, particle_two):
     solutions = []
-    for per_component in zip(zip(*particle_one), zip(*particle_two)):
-        solutions.append(*solve_quadratic(*ABC(*per_component)))
-    bla= Counter(solutions).most_common()
-    print(bla)
+    # this gives us tuples of position, velocity, and acceleration
+    # of both particles per component X, Y, Z
+    for xva_component in zip(zip(*particle_one), zip(*particle_two)):
+        solutions += solve_quadratic(*ABC(*xva_component))
+
     return solutions
 
 
+def get_colision_time(particle_one, particle_two):
+    valid_solutions = (sol for sol in solve_per_component(particle_one, particle_two)
+                                        if sol and sol >= 0)
 
-def is_coliding(particle_one, particle_two):
-    x_1, y_1, z_1 = particle_one.position
-    x_2, y_2, z_2 = particle_two.position
-
-    vx_1, vy_1, vz_1 = particle_one.velocity
-    vx_2, vy_2, vz_2 = particle_two.velocity
-
-    ax_1, ay_1, az_1 = particle_one.acceleration
-    ax_2, ay_2, az_2 = particle_two.acceleration
-
-    A_x = (ax_1-ax_2) / 2
-    B_x = (ax_1-ax_2) /2 + vx_1 - vx_2
-    C_x = x_1 - x_2
-
-    A_y = (ay_1-ay_2) / 2
-    B_y = (ay_1-ay_2) /2 + vy_1 - vy_2
-    C_y = y_1 - y_2
-
-    A_z = (az_1-az_2) / 2
-    B_z = (az_1-az_2) /2 + vz_1 - vz_2
-    C_z = z_1 - z_2
-    
-    all_solutions = [solution(A_x, B_x, C_x), solution(A_y, B_y, C_y), solution(A_z, B_z, C_z)]
-    if not all_solutions:
-        return False
-
-    if any(not sol for sol in all_solutions):
-        return False
-
-    # if any(not sol for sol in (solution(A_x, B_x, C_x), solution(A_y, B_y, C_y), solution(A_z, B_z, C_z)) ):
-    #     return False
-    else:
-        all_solutions = [*solution(A_x, B_x, C_x), *solution(A_y, B_y, C_y), *solution(A_z, B_z, C_z)]
-        #all_solutions = [*sol for sol in all_solutions]
-        if not all_solutions:
-            return False
-        count_solutions = Counter(all_solutions).most_common()
+    count_solutions = Counter(valid_solutions).most_common()
+    try:
         if count_solutions[0][1] == 3:
-            return count_solutions[0][0] # colision time
+        # all components colide at the same tame
+            return count_solutions[0][0]
+    except:
+        return None
+
+
+def generate_collisions(in_data):
+    collisions = {}
+    for one, two in combinations(in_data, 2):
+        time = get_colision_time(one, two)
+        if time:
+            collisions[time] = collisions.get(time, set()) | {one, two}
+
+    return collisions
+
+
+def live_after_colliding(in_data):
+    already_destroyed = set()
+    alive = set(in_data)
+    for time, particles in sorted(generate_collisions(in_data).items()):
+        if len(particles & already_destroyed) == 1:
+            print('this one stays alive')
+            continue
+        else:
+            alive -= particles
+            already_destroyed |= particles
+
+    return len(alive)
+
 
 
 ParticleData = namedtuple('ParticleData', ['position', 'velocity', 'acceleration'])
@@ -117,27 +102,7 @@ for line in get_input('inputs/20'):
 # in the "long run", the closest particle is the one with smallest acceleration
 closest = particle_data.index(min(particle_data, key=lambda arg: magnitude(arg.acceleration)))
 
-
-
-remaining = set(particle_data)
-colliding = set()
-times = []
-collisions = {}
-for one, two in combinations(particle_data, 2):
-    time = is_coliding(one, two)
-    if time:
-        if time in collisions:
-            collisions[time].append(one)
-            collisions[time].append(two)
-        else:
-            collisions[time] = [one, two]
-
-
-removed_so_far = set()
-for time, members in sorted(collisions.items()):
-    remaining -= set(members)
-
-remaining_particles = len(remaining)
+remaining_particles = live_after_colliding(particle_data)
 
 
 print_solutions(closest, remaining_particles)
