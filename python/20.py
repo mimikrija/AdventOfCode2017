@@ -29,6 +29,39 @@ def solution(a, b, c):
     return (sol for sol in solutions if sol >= 0)
 
 
+def solve_quadratic(a, b, c):
+    D = discriminant(a, b, c)
+    if D < 0: # no real/finite solutions
+        return False
+
+    if a == 0: # not a quadratic equation
+        if b !=0:
+            solutions = [-c/b]
+        else:
+            return False
+    else: # quadratic equation, two solutions
+        solutions = ((-b + root_factor * sqrt(D))/(2*a) for root_factor in (-1, 1))
+
+    return [sol for sol in solutions if sol >= 0]
+
+def ABC(first_component, second_component):
+    C, B, A = (one-two for one, two in zip(first_component, second_component))
+
+    A /= 2
+    B += A
+
+    return A, B, C
+
+def solve_per_component(particle_one, particle_two):
+    solutions = []
+    for per_component in zip(zip(*particle_one), zip(*particle_two)):
+        solutions.append(*solve_quadratic(*ABC(*per_component)))
+    bla= Counter(solutions).most_common()
+    print(bla)
+    return solutions
+
+
+
 def is_coliding(particle_one, particle_two):
     x_1, y_1, z_1 = particle_one.position
     x_2, y_2, z_2 = particle_two.position
