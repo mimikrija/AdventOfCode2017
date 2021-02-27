@@ -1,4 +1,5 @@
 # Day 18: Duet
+
 from santas_little_helpers import *
 from collections import deque
 
