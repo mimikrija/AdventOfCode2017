@@ -27,33 +27,33 @@ def run_bursts(num, in_infected, start, starting_direction):
 
 
 
-def burst_two(infected, flagged, weakened, current_position, in_direction, counter):
+def burst_two(infected, flagged, weakened, current_position, direction, counter):
     # infected = set(in_infected)
     # flagged = set(in_flagged)
     # weakened = set(in_weakened)
 
     if current_position in infected:
         # infected; turn right and add to flagged
-        direction = in_direction*(0+1j)
+        direction *= 0+1j
         infected.remove(current_position)
         flagged.add(current_position)
     elif current_position in flagged:
         # flagged; reverse direction and clean
-        direction = -in_direction
+        direction = -direction
         flagged.remove(current_position)
     elif current_position in weakened:
         # weakened; keep direction the same and infect it
-        direction = in_direction
         infected.add(current_position)
         weakened.remove(current_position)
         counter += 1
     else:
         # not infected; turn left and add to weakened
-        direction = in_direction * (0-1j)
+        direction *= 0-1j
         weakened.add(current_position)
-        
+    
+    current_position += direction
 
-    return infected, flagged, weakened, current_position + direction, direction, counter
+    return counter, current_position, direction
 
 
 def run_bursts_2(num, in_infected, start, starting_direction):
@@ -64,7 +64,7 @@ def run_bursts_2(num, in_infected, start, starting_direction):
     direction = starting_direction
     counter = 0
     for _ in range(num):
-        infected, flagged, weakened, current_position, direction, counter = burst_two(infected, flagged, weakened, current_position, direction, counter)
+        counter, current_position, direction = burst_two(infected, flagged, weakened, current_position, direction, counter)
     return counter
 
 input_map = get_input('inputs/22')
