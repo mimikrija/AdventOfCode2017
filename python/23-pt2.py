@@ -29,8 +29,9 @@ if b % d == 0:  # 11-12
 # in range (2, b)
 # until the first one is found (f = 0)
 
-if f == 0:
-    h += 1
+if f == 0: # 25-26
+    h += 1 # this will increment the counter by one as long as
+           # the number checked (b) is not a prime
 
 
 
