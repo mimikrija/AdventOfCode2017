@@ -41,5 +41,12 @@ if b == c: # if g != 0 goto 31
 b += 17 # increment the number we're checking by 17
 # goto 9 -there we reset f to 1 and check the non-prime stuff again
 
+#### all above translates to finding all non-prime (compound) numbers
+#### between c and d in increments of 17
+from math import sqrt
+not_prime = lambda x: any(x % num == 0 for num in range(2, int(sqrt(x))))
 
-
+b = 79 * 100 + 100000
+c = b + 17000
+part_2 = sum(not_prime(num) for num in range(b, c+1, 17))
+print(part_2)
