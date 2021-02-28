@@ -14,7 +14,7 @@ while True:
     # g = d   # 12
     # g *= e
     # g -= b
-    g = d * e - b  # d's value is set before this loop (d = 2)
+    # g = d * e - b  # d's value is set before this loop (d = 2)
     if d * e == b: # if g != 0 goto 17 (if we invert the condition we get this)
         f = 0
     e += 1 # 17   # e is a counter which starts at 2 (line 11)
