@@ -8,25 +8,18 @@ d = 2
 # end of the initialization block - we are never sent with jnz to any
 # lines above here
 
-e = 2  # 11
+e = 2  # 11 (this is just for setting the range of e back to 2 so we can merge lines)
 g = d  # 12 (I'll just leave this here because this is another one we jump to)
-while True:
-    # g = d   # 12
-    # g *= e
-    # g -= b
-    # g = d * e - b  # d's value is set before this loop (d = 2)
-    if d * e == b: # if g != 0 goto 17 (if we invert the condition we get this)
-        f = 0
-        # b and d are constants in this loop
-        # so first time we find such e for which b / e == d, f is set to zero
-        # i think this is important because of line 25 in the assembly
-    e += 1 # 17   # e is a counter which starts at 2 (line 11)
-    # g = e
-    # g -= b # 19
-    # g = e - b
-    if e == b: # again, I invert the condition, I think this jnz translates to
-        break  # a while loop like this
-    # if g != 0 go to 12
+
+# lines 12 - 19 mean: is there *any* number 2 <= e <= b, such that
+# d * e == b --> b / e == d --> b / d == e
+# if any(d * e == b for e in range(2, b+1))
+# or shorter: is b divisible by d(2)? if yes, f = 0
+# so basically it means set f=0, but since I see in the assembly that d
+# might change, I will write it as:
+if b % d == 0:  # 11-12
+    f = 0       # 20
+
 
 
 print(b, c, d, e, f, g, h)
