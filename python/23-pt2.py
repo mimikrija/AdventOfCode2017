@@ -34,6 +34,12 @@ if f == 0: # 25-26
            # the number checked (b) is not a prime
 
 
+# g = b - c # 27-28
+if b == c: # if g != 0 goto 31
+    print(f'solution h is {h}')
+    #quit()
+b += 17 # increment the number we're checking by 17
+# goto 9 -there we reset f to 1 and check the non-prime stuff again
 
-print(b, c, d, e, f, g, h)
-print(f'solution h is {h}')
+
+
