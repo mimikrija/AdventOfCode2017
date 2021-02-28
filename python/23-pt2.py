@@ -20,6 +20,17 @@ g = d  # 12 (I'll just leave this here because this is another one we jump to)
 if b % d == 0:  # 11-12
     f = 0       # 20
 
+# d += 1 # increase d, I guess we'll be checking if b is divisible by 3 now
+# g = d - b
+# if d != b   # if g != 0 go to 11
+# so basically this means keep checking if b is divisible by any number
+# in range (2, b)
+# until the first one is found (f = 0 - there are no commands which reset f)
+# so basically all subsequent calls after f is first set to zero are useless
+
+if f == 0:
+    h += 1
+
 
 
 print(b, c, d, e, f, g, h)
