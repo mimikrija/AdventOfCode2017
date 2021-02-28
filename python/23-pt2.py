@@ -23,7 +23,7 @@ while True:
     e += 1 # 17   # e is a counter which starts at 2 (line 11)
     # g = e
     # g -= b # 19
-    g = e - b
+    # g = e - b
     if e == b: # again, I invert the condition, I think this jnz translates to
         break  # a while loop like this
     # if g != 0 go to 12
