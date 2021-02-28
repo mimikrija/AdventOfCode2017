@@ -2,11 +2,13 @@ b, c, d, e, f, g, h = 0, 0, 0, 0, 0, 0, 0
 
 b = 79 * 100 + 100000
 c = b + 17000
-f = 1
-d = 2
+
 
 # end of the initialization block - we are never sent with jnz to any
 # lines above here
+
+f = 1  # 9
+d = 2
 
 e = 2  # 11 (this is just for setting the range of e back to 2 so we can merge lines)
 g = d  # 12 (I'll just leave this here because this is another one we jump to)
@@ -25,8 +27,7 @@ if b % d == 0:  # 11-12
 # if d != b   # if g != 0 go to 11
 # so basically this means keep checking if b is divisible by any number
 # in range (2, b)
-# until the first one is found (f = 0 - there are no commands which reset f)
-# so basically all subsequent calls after f is first set to zero are useless
+# until the first one is found (f = 0)
 
 if f == 0:
     h += 1
