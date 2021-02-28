@@ -11,9 +11,10 @@ d = 2
 e = 2  # 11
 g = d  # 12 (I'll just leave this here because this is another one we jump to)
 while True:
-    g = d   # 12
-    g *= e
-    g -= b
+    # g = d   # 12
+    # g *= e
+    # g -= b
+    g = d * e - b
     if g == 0: # if g != 0 goto 17 (if we invert the condition we get this)
         f = 0
     e += 1 # 17
