@@ -17,6 +17,9 @@ while True:
     # g = d * e - b  # d's value is set before this loop (d = 2)
     if d * e == b: # if g != 0 goto 17 (if we invert the condition we get this)
         f = 0
+        # b and d are constants in this loop
+        # so first time we find such e for which b / e == d, f is set to zero
+        # i think this is important because of line 25 in the assembly
     e += 1 # 17   # e is a counter which starts at 2 (line 11)
     g = e
     g -= b # 19
