@@ -1,6 +1,7 @@
 # Day 23: Coprocessor Conflagration
 
 from santas_little_helpers import *
+from math import sqrt
 
 
 def initialize_registers(instructions):
@@ -56,7 +57,7 @@ def duo(instructions, registers, pos=0):
                     pos += registers[args[1]] - 1
 
         pos += 1
-    
+
     return count_mul
 
 
@@ -65,5 +66,14 @@ instructions = [line.split(' ') for line in get_input('inputs/23')]
 registers_pt1 = initialize_registers(instructions)
 part_1 = duo(instructions, registers_pt1)
 
-print_solutions(part_1)
+# part 2 - see 23-pt2.py and translate-23.txt for translation of assembly comments
+compound = lambda x: any(x % num == 0 for num in range(2, int(sqrt(x))))
+
+b = 79 * 100 + 100000
+c = b + 17000
+part_2 = sum(compound(num) for num in range(b, c+1, 17))
+
+
+print_solutions(part_1, part_2)
 # Part 1 solution is: 5929
+# Part 2 solution is: 907
