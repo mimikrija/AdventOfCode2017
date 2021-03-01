@@ -11,6 +11,7 @@ def bridge_strength(in_bridge):
 
 def find_strongest_bridge(in_bridge, dangling, remaining_components):
     max_strength = 0
+    max_length_and_strength = (0, 0)
     incomplete_bridges = deque()
     incomplete_bridges.append([in_bridge, dangling])
     while incomplete_bridges:
@@ -25,8 +26,9 @@ def find_strongest_bridge(in_bridge, dangling, remaining_components):
                 incomplete_bridges.append([bridge + [candidate], new_dangling])
 
         max_strength = max(max_strength, bridge_strength(bridge))
+        max_length_and_strength = max((len(bridge), bridge_strength(bridge)), max_length_and_strength)
 
-    return max_strength
+    return max_strength, max_length_and_strength[1]
 
 
 
@@ -38,7 +40,8 @@ starting_num_to_match = components[0][1]
 # I checked, there are no duplicates in the input so this is ok:
 rest = set(components[1:])
 
-part_1 = find_strongest_bridge([components[0]], starting_num_to_match, rest)
+part_1, part_2 = find_strongest_bridge([components[0]], starting_num_to_match, rest)
 
-print_solutions(part_1)
+print_solutions(part_1, part_2)
 # Part 1 solution is: 1695
+# Part 2 solution is: 1673
