@@ -1,7 +1,8 @@
 # Day 21: Fractal Art
 
 from santas_little_helpers import *
-from itertools import chain
+import numpy as np
+
 
 def all_configurations_of(in_rule):
 
@@ -34,81 +35,63 @@ def expand_rules(in_rules):
     return rules
 
 
-def translate_rule_to_set(rule):
+def translate_rule_to_matrix(rule):
     "translates string to a set of local coordinates of that block"
-    return {(row, column) for row, line in enumerate(rule.split('/'))
-            for column, c in enumerate(line)
-            if c == '#'}
+    return np.array([list(line) for line in rule.split('/')])
 
 
-def translate_set_to_rule(coords, size):
-    out_rule = ''
-    for row in range(size):
-        line = ['.']*size
-        for column in range(size):
-            if (row, column) in coords:
-                line[column] = '#'
-        out_rule += ''.join(line) + '/'
-    return out_rule[:-1]
+def translate_matrix_to_rule(in_matrix):
+    return '/'.join(line for line in (''.join(c for c in line_list) for line_list in in_matrix))
 
 
-def local_to_global(in_matrix, sub_block_size):
-    size = len(in_matrix)
-    out_global = set()
-    for x in range(size):
-        for y in range(size):
-            out_global.add
+def enhance(in_matrix):
+    size = in_matrix.shape[0]
 
-
-def global_to_local(in_global, sub_block_size, blocks):
-    max_hor = max(in_global)[0]
-    max_vert = max(in_global,key=lamda x: x[1])[0]
-    out_matrix = []
-    for row in blocks:
-        for column in blocks:
-            out_matrix.append({(x, y) for (x, y) in in_global 
-            if column <= x < column + sub_block_size and row <= y < row + sub_block_size})
-    return out_matrix
-
-def enhance(in_matrix, sub_block_size):
-    blocks_hor = len(in_matrix)
-    block_vert = len(in_matrix[0])
-    block_size = len(in_matrix[0][0].split('/')[0])
-    size = blocks_hor * sub_block_size
-    if block_size == 3:
-        # enhance blocks immediatelly
-        out_matrix = []
-        for row, row_block in enumerate(in_matrix):
-            new_line = [' ']*blocks_hor
-            for column, block in enumerate(row_block):
-                new_line[column] = expanded_rules[block]
-            out_matrix.append(new_line)
-        enhanced_block_size = 4
-
-
+    if size % 2 == 0:
+        subblocks = size // 2
+        cbs = 2 # current block size
+        nbs = 3 # new block size
     else:
-        divisions = next(div for div, rest in (divmod(size, n) for n in {2,3}) if rest == 0)
+        subblocks = size // 3
+        cbs = 3
+        nbs = 4
+
+    if subblocks == 1:
+        return expanded_rules[translate_matrix_to_rule(in_matrix)]
+
+    enhanced = np.empty((subblocks*nbs, subblocks*nbs), dtype=str)
+    for hor in range(subblocks):
+        for ver in range(subblocks):
+            block = in_matrix[cbs*hor:cbs*(hor+1), cbs*ver:cbs*(ver+1)]
+            enhanced[nbs*hor:nbs*(hor+1), nbs*ver:nbs*(ver+1)] = expanded_rules[translate_matrix_to_rule(block)]
+
+    return enhanced
 
 
-    
-    print(block_vert, blocks_hor, size)
-    return out_matrix, enhanced_block_size
+def count_pixels(in_matrix):
+    is_on = in_matrix == '#'
+    return np.count_nonzero(is_on)
 
 
 
-
-raw_rules = (line.split(' => ') for line in get_input('inputs/21-ex'))
+raw_rules = (line.split(' => ') for line in get_input('inputs/21'))
 
 # a basic set of rules; from input
-rules = {left: translate_to_set(right) for left, right in raw_rules}
+rules = {left: translate_rule_to_matrix(right) for left, right in raw_rules}
 
 # an expanded set of rules, takes into acc. all configurations
 expanded_rules = expand_rules(rules)
 
-#print(list(expanded_rules.keys()))
+# start from here
+current_state = translate_rule_to_matrix('.#./..#/###')
 
-start = [['.#./..#/###']]
+for count in range(1,19):
+    current_state = enhance(current_state)
+    if count == 5:
+        part_1 = count_pixels(current_state)
+    if count == 18:
+        part_2 = count_pixels(current_state)
 
-#print(all_configurations_of('.#./..#/#..'))
-
-print(enhance(start, 3))
+print_solutions(part_1, part_2)
+# Part 1 solution is: 186
+# Part 2 solution is: 3018423
