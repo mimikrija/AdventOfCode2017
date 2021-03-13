@@ -46,15 +46,10 @@ def translate_matrix_to_rule(in_matrix):
 
 def enhance(in_matrix):
     size = in_matrix.shape[0]
+    cbs = 2 if size % 2 == 0 else 3 # current block size
+    nbs = cbs + 1                   # new block size
+    subblocks = size // cbs         # total subblocks per dimension
 
-    if size % 2 == 0:
-        subblocks = size // 2
-        cbs = 2 # current block size
-        nbs = 3 # new block size
-    else:
-        subblocks = size // 3
-        cbs = 3
-        nbs = 4
 
     if subblocks == 1:
         return expanded_rules[translate_matrix_to_rule(in_matrix)]
